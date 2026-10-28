@@ -34,9 +34,9 @@ select v.* from (values
 where not exists (select 1 from public.jorneys);
 
 insert into public.events (title, place, starts_at, description)
-select v.* from (values
-  ('Racha de Sábado', 'Quadra do Parque do Povo', date_trunc('day', now()) + interval '9 days 9 hours', '5x5 rotativo, quem perde sai. Leve água e camisa clara e escura.'),
-  ('Desafio 3PT Vagaroso', 'Ginásio Municipal', date_trunc('day', now()) + interval '23 days 15 hours', 'Torneio de bolas de três em 60 segundos.'),
-  ('Vagarosos Cup 3x3', 'Quadra do Parque do Povo', date_trunc('day', now()) + interval '37 days 8 hours', 'Times de 3 sorteados na hora. Inscrições no grupo.')
-) as v(title, place, starts_at, description)
+select v.title, v.place, (date_trunc('day', now() at time zone 'America/Sao_Paulo') + v.off) at time zone 'America/Sao_Paulo', v.description from (values
+  ('Racha de Sábado', 'Quadra do Parque do Povo', interval '9 days 9 hours', '5x5 rotativo, quem perde sai. Leve água e camisa clara e escura.'),
+  ('Desafio 3PT Vagaroso', 'Ginásio Municipal', interval '23 days 15 hours', 'Torneio de bolas de três em 60 segundos.'),
+  ('Vagarosos Cup 3x3', 'Quadra do Parque do Povo', interval '37 days 8 hours', 'Times de 3 sorteados na hora. Inscrições no grupo.')
+) as v(title, place, off, description)
 where not exists (select 1 from public.events);
